@@ -5,7 +5,7 @@ import time
 
 def control(position_list):
     penup()
-    goto(-10, 220)
+    goto(-10, 210)
     speed(0)
     shapesize(1)
     shape('square')

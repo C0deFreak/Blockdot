@@ -4,28 +4,47 @@ import random
 
 pos_list = []
 # Random Blocks in Stone Layers
-SLR = ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', ' ', ' ', ' ', ' ', 'Di', 'Sa', 'D', 'S', 'S']
+SLR = ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', ' ', ' ', ' ', ' ', 'Di', 'Sa', 'D', 'S', 'S']
 
 # Random Blocks in Dirt Layers
-DLR = ['D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D',  ' ', ' ', ' ', ' ', 'Di', 'Sa', 'S']
+DLR = ['D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D',  ' ', ' ', ' ', ' ', 'Di', 'Sa', 'S']
 
 # Random hills
-G1_list = [' ', ' ', ' ', ' ', 'G']
-G2_list = [' ', ' ', ' ', ' ', 'G']
-G3_list = [' ', ' ', ' ', ' ', 'G']
-G4_list = [' ', ' ', ' ', ' ', 'G']
-G5_list = [' ', ' ', ' ', ' ', 'G']
+G1_list = [' ', 'G', 'G', 'G']
+G2_list = [' ', 'G']
+G3_list = [' ']
+G4_list = [' ', ' ']
+G5_list = [' ', ' ', ' ']
 
 G1 = random.choice(G1_list)
+if G1 == 'G':
+    G2_list.append('G')
+
 G2 = random.choice(G2_list)
+if G2 == 'G':
+    G3_list.append('G')
+
 G3 = random.choice(G3_list)
+if G3 == 'G':
+    G4_list.append('G')
+    G1 = 'D'
+
 G4 = random.choice(G4_list)
+if G4 == 'G':
+    G5_list.append('G')
+    G2 = 'D'
+
 G5 = random.choice(G5_list)
+if G5 == 'G':
+    G3 = 'Du'
 
 
 # Terrain
-map_list = [[' ', ' ', G1, G1, G1, ' ', ' ', G2, G2, G2, ' ', ' ', G3, G3, G3, ' ', ' ', G4, G4, G4, ' ', ' ', G5, G5, G5, ' ', ' ', G1, G1, G1, ' ', ' ', G2, G2, G2, ' ', ' ', G3, G3, G3, ' ', ' ', G4, G4, G4, ' ', ' ', G5, G5, G5, ' ', ' ', G1, G1, G1, ' ', ' ', G2, G2, G2, ' ', ' ', G3, G3, G3, ' ', ' ', G4, G4, G4, ' ', ' '],
-            [' ', G1, G1, G1, G1, G1, G2, G2, G2, G2, G2, G3, G3, G3, G3, G3, G4, G4, G4, G4, G4, G5, G5, G5, G5, G5, G1, G1, G1, G1, G1, G2, G2, G2, G2, G2, G3, G3, G3, G3, G3, G4, G4, G4, G4, G4, G5, G5, G5, G5, G5, G1, G1, G1, G1, G1, G2, G2, G2, G2, G2, G3, G3, G3, G3, G3, G4, G4, G4, G4, G4, ' '],
+map_list = [[' ', ' ', ' ', ' ', ' ', G5, G5, ' ', ' ', ' ', G5, G4, G4, G5, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', G5, G5, G5, ' ', ' ', ' ', ' ', ' ', G5, G4, G5, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', G5, G5, G4, G3, G5, ' ', G5, G4, G3, G3, G4, G5, ' ', ' ', ' ', ' ', ' ', ' ', G5, G4, ' ', ' ', ' ', ' ', G5, G4, G4, G3, G3, G4, G5, G5, G4, G4, G3, G3, G3, G4, G5, G5, G5, ' ', G5, G4, G5, ' ', ' ', ' ', ' ', ' ', G5, G5, G4, G4, G4, G3, G4, G5, G5, ' ', ' ', ' ', G5, G4, G5, ' ', ' ', ' ', ' '],
+            [' ', G5, G5, G4, G4, G3, G3, G3, G5, G4, G3, G2, G2, G3, G4, G4, ' ', G5, G4, G5, G5, G4, G3, G4, G5, G5, G4, G3, G3, G3, G3, G2, G2, G3, G4, G3, G2, G2, G2, G2, G2, G3, G3, G4, G5, G4, G3, G4, G5, G5, G4, G3, G3, G3, G2, G2, G2, G2, G2, G3, G4, G5, G5, G4, G4, G3, G4, G5, ' ', ' ', ' ', ' '],
+            [G5, G3, G3, G3, G3, G3, G2, G2, G2, G2, G1, G1, G1, G1, G1, G2, G2, G3, G3, G3, G3, G2, G2, G3, G4, G2, G2, G2, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G2, G3, G3, G2, G2, G3, G4, G5, G3, G2, G2, G2, G1, G1, G1, G1, G1, G1, G1, G2, G3, G3, G2, G2, G3, G4, G5, ' ', ' '],
+            [G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1],
             [random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR)],
             [random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR)],
             [random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR)],
@@ -64,7 +83,7 @@ def maker():
 
     # Draws the block
     # Row
-    for x in range(20):
+    for x in range(26):
         penup()
         goto(-700, (200 - (x * 20)))
         pendown()

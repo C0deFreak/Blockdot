@@ -14,25 +14,32 @@ def block_draw():
     penup()
 
 
-def tree():
+def tree(leaf, trunk_color, leaf_color):
     trunk_size = random.randint(1, 4)
     penup()
     setheading(90)
-    forward((trunk_size * 20) + 40)
-    right(90)
-    fillcolor('forestgreen')
-    block_draw()
-    back(40)
-    right(90)
-    forward(20)
-    left(90)
-    for leafs in range(3):
+    forward(trunk_size * 20)
+
+    if leaf:
+        forward(40)
+        right(90)
+        fillcolor(leaf_color)
         block_draw()
-    back(40)
-    right(90)
-    forward(20)
-    left(90)
-    fillcolor('peru')
+        back(40)
+        right(90)
+        forward(20)
+        left(90)
+        for leafs in range(3):
+            block_draw()
+        back(40)
+        right(90)
+        forward(20)
+        left(90)
+    if not leaf:
+        right(90)
+        forward(20)
+
+    fillcolor(trunk_color)
     for trunk in range(trunk_size):
         block_draw()
         right(90)
@@ -41,16 +48,37 @@ def tree():
         back(20)
 
 
-pos_list = []
-# Random Blocks in Stone Layers
-SLR = ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', ' ', ' ', ' ', ' ', 'Di', 'Sa', 'D', 'S', 'S']
+bioms_list = ['grass', 'desert', 'rocky', 'snow']
+biom_choice = random.choice(bioms_list)
+if biom_choice == 'grass':
+    main_block = 'G'
+    second_block = 'D'
+    rb = 'D'
+    trees = True
 
-# Random Blocks in Dirt Layers
-DLR = ['D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D',  ' ', ' ', ' ', ' ', 'Di', 'Sa', 'S']
+if biom_choice == 'desert':
+    main_block = 'Sa'
+    second_block = 'Sa'
+    rb = 'Sa'
+    trees = True
+
+if biom_choice == 'rocky':
+    main_block = 'S'
+    second_block = 'S'
+    rb = 'S'
+    trees = False
+
+if biom_choice == 'snow':
+    main_block = 'Sn'
+    second_block = 'Sn'
+    rb = 'Sn'
+    trees = True
+
+RL = [' ', ' ', ' ', ' ', 'Di', 'Sa', 'S', rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb, rb]
 
 # Random hills
-G1_list = [' ', 'G', 'G', 'G']
-G2_list = [' ', 'G']
+G1_list = [' ', main_block, main_block, main_block]
+G2_list = [' ', main_block]
 G3_list = [' ']
 G4_list = [' ', ' ']
 G5_list = [' ', ' ', ' ']
@@ -60,66 +88,116 @@ tree_list3 = [' ']
 tree_list4 = [' ']
 tree_list5 = [' ']
 
+G1 = ' '
+G2 = ' '
+G3 = ' '
+G4 = ' '
+G5 = ' '
+
+T1 = ' '
+T2 = ' '
+T3 = ' '
+T4 = ' '
+T5 = ' '
+
 G1 = random.choice(G1_list)
 T1 = random.choice(tree_list)
-if G1 == 'G':
-    G2_list.append('G')
-    tree_list2.append('T')
-    T2 = ' '
-    T3 = ' '
-    T4 = ' '
-    T5 = ' '
+if G1 == main_block:
+    G2_list.append(main_block)
+    if trees:
+        tree_list2.append('T')
+        T2 = ' '
+        T3 = ' '
+        T4 = ' '
+        T5 = ' '
+    else:
+        T1 = main_block
+        T2 = ' '
+        T3 = ' '
+        T4 = ' '
+        T5 = ' '
 
-G2 = random.choice(G2_list)
-T2 = random.choice(tree_list2)
-if G2 == 'G':
-    G3_list.append('G')
-    tree_list3.append('T')
-    T1 = 'G'
-    T3 = ' '
-    T4 = ' '
-    T5 = ' '
+    G2 = random.choice(G2_list)
+    T2 = random.choice(tree_list2)
+    if G2 == main_block:
+        G3_list.append(main_block)
+        if trees:
+            tree_list3.append('T')
+            T1 = main_block
+            T3 = ' '
+            T4 = ' '
+            T5 = ' '
+        else:
+            T1 = main_block
+            T2 = main_block
+            T3 = ' '
+            T4 = ' '
+            T5 = ' '
 
-G3 = random.choice(G3_list)
-T3 = random.choice(tree_list3)
-if G3 == 'G':
-    G4_list.append('G')
-    G1 = 'D'
-    tree_list4.append('T')
-    T1 = 'D'
-    T2 = 'G'
-    T4 = ' '
-    T5 = ' '
+        G3 = random.choice(G3_list)
+        T3 = random.choice(tree_list3)
+        if G3 == main_block:
+            G4_list.append(main_block)
+            G1 = second_block
+            if trees:
+                tree_list4.append('T')
+                T1 = second_block
+                T2 = main_block
+                T4 = ' '
+                T5 = ' '
+            else:
+                T1 = second_block
+                T2 = main_block
+                T3 = main_block
+                T4 = ' '
+                T5 = ' '
 
-G4 = random.choice(G4_list)
-T4 = random.choice(tree_list4)
-if G4 == 'G':
-    G5_list.append('G')
-    G2 = 'D'
-    tree_list5.append('T')
-    T1 = 'D'
-    T2 = 'D'
-    T3 = 'G'
-    T5 = ' '
+            G4 = random.choice(G4_list)
+            T4 = random.choice(tree_list4)
+            if G4 == main_block:
+                G5_list.append(main_block)
+                G2 = second_block
+                if trees:
+                    tree_list5.append('T')
+                    T1 = second_block
+                    T2 = main_block
+                    T3 = main_block
+                    T5 = ' '
+                else:
+                    T1 = second_block
+                    T2 = second_block
+                    T3 = main_block
+                    T4 = main_block
+                    T5 = ' '
+
+                G5 = random.choice(G5_list)
+                T5 = random.choice(tree_list5)
+                if G5 == main_block:
+                    G3 = second_block
+                    if trees:
+                        T1 = second_block
+                        T2 = second_block
+                        T3 = main_block
+                        T4 = main_block
+                    else:
+                        T1 = second_block
+                        T2 = second_block
+                        T3 = second_block
+                        T4 = main_block
+                        T5 = main_block
 
 
-G5 = random.choice(G5_list)
-T5 = random.choice(tree_list5)
-if G5 == 'G':
-    G3 = 'D'
-    T1 = 'D'
-    T2 = 'D'
-    T3 = 'D'
-    T4 = 'G'
-
+pos_list = []
+# Random Blocks in Stone Layers
+SLR = ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', ' ', ' ', ' ', ' ', 'Di', 'Sa', 'D', 'S', 'S']
 
 # Terrain
 map_list = [[' ', ' ', ' ', ' ', ' ', G5, T5, ' ', ' ', ' ', G5, G4, G4, G5, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', G5, G5, G5, ' ', ' ', ' ', ' ', ' ', G5, G4, G5, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
             [' ', ' ', ' ', G5, G5, T3, G4, G5, ' ', G5, G4, G3, G3, G4, G4, G5, ' ', ' ', ' ', ' ', ' ', G5, T5, ' ', ' ', ' ', ' ', G5, G4, G4, G3, G3, G4, G5, G5, G4, G4, G3, G3, G3, T4, G5, G5, G5, ' ', G5, G4, G5, ' ', ' ', ' ', ' ', ' ', G5, G5, G4, G4, G4, G3, G4, T5, G5, ' ', ' ', ' ', G5, G4, G5, ' ', ' ', ' ', ' '],
             [T5, G5, G5, G4, G4, G3, G3, T2, G5, G4, G3, G2, G2, G3, G4, G4, G4, G5, T3, G5, G5, G4, G3, G4, G5, G5, G4, G3, G3, T3, G3, G2, G2, G3, G4, T2, G2, G2, G2, G2, G2, G3, G3, G4, G5, G4, G3, G4, G5, G5, G4, G3, G3, G3, G2, G2, G2, G2, G2, G3, G4, G5, G5, G4, G4, G3, G4, G5, ' ', ' ', ' ', ' '],
             [G3, G3, G3, G3, G3, G3, G2, G2, G2, G2, G1, G1, G1, G1, G1, G2, G2, G3, G2, G3, G3, T1, G2, G3, G4, G2, G2, G2, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G2, G3, G3, G2, G2, G3, G4, T1, G2, G2, G2, G2, G1, G1, G1, G1, G1, G1, G1, G2, G3, G3, G2, G2, G3, G4, G5, ' ', ' '],
-            [T1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1],
-            [random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR), random.choice(DLR)],
+            [T1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1],
+            [random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL)],
             [random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR)],
             [random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR)],
             [random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR), random.choice(SLR)],
@@ -197,9 +275,25 @@ def maker():
                 block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
                 pos_list.append(block_pos)
 
+            # Snow
+            elif map_list[x][y] == 'Sn':
+                fillcolor('white')
+                block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
+                pos_list.append(block_pos)
+
             # Trees
             elif map_list[x][y] == 'T':
-                tree()
+                if biom_choice == 'grass':
+                    tree(leaf=True, leaf_color='forestgreen', trunk_color='peru')
+
+                if biom_choice == 'desert':
+                    tree(leaf=False, leaf_color='forestgreen', trunk_color='darkgreen')
+
+                if biom_choice == 'rocky':
+                    tree(leaf=True, leaf_color='forestgreen', trunk_color='peru')
+
+                if biom_choice == 'snow':
+                    tree(leaf=True, leaf_color='seagreen', trunk_color='chocolate')
 
             # Air
             elif map_list[x][y] == ' ':

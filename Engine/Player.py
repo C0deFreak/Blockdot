@@ -91,28 +91,32 @@ def control(position_list):
 
         # Build
         if keyboard.is_pressed('enter'):
+            build.fillcolor('SaddleBrown')
+            build.pencolor('black')
+
             if watching == 'w' and f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' not in position_list:
                 build.penup()
                 build.goto(player.xcor() - 10, player.ycor() + 30)
                 position_list.append(f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)')
+                block_draw()
 
             if watching == 'a' and f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' not in position_list:
                 build.penup()
                 build.goto(player.xcor() - 30, player.ycor() + 10)
                 position_list.append(f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)')
+                block_draw()
 
             if watching == 's' and f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' not in position_list:
                 build.penup()
                 build.goto(player.xcor() - 10, player.ycor() - 10)
                 position_list.append(f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)')
+                block_draw()
 
             if watching == 'd' and f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' not in position_list:
                 build.penup()
                 build.goto(player.xcor() + 10, player.ycor() + 10)
                 position_list.append(f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)')
-
-            build.color('SaddleBrown')
-            block_draw()
+                block_draw()
 
         # Jumping
         if keyboard.is_pressed('space') and not jumped:

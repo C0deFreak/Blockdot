@@ -168,6 +168,12 @@ if G1 == main_block:
 
 
 pos_list = []
+grass_list = []
+dirt_list = []
+stone_list = []
+diorite_list = []
+sand_list = []
+snow_list = []
 # Random Blocks in Stone Layers
 SLR = [ ' ', ' ', ' ', ' ', 'Di', 'Sa', 'D'] + ['S'] * 60
 

@@ -14,6 +14,16 @@ def block_draw():
     penup()
 
 
+grass_list = []
+dirt_list = []
+stone_list = []
+diorite_list = []
+sand_list = []
+snow_list = []
+trunk_list = []
+leaf_list = []
+
+
 def tree(leaf, trunk_color, leaf_color):
     trunk_size = random.randint(1, 4)
     penup()
@@ -24,12 +34,16 @@ def tree(leaf, trunk_color, leaf_color):
         forward(40)
         right(90)
         fillcolor(leaf_color)
+        block_pos = f'({float(round((xcor() - 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
+        leaf_list.append(block_pos)
         block_draw()
         back(40)
         right(90)
         forward(20)
         left(90)
         for leafs in range(3):
+            block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
+            leaf_list.append(block_pos)
             block_draw()
         back(40)
         right(90)
@@ -41,6 +55,8 @@ def tree(leaf, trunk_color, leaf_color):
 
     fillcolor(trunk_color)
     for trunk in range(trunk_size):
+        block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
+        trunk_list.append(block_pos)
         block_draw()
         right(90)
         forward(20)
@@ -48,6 +64,8 @@ def tree(leaf, trunk_color, leaf_color):
         back(20)
 
 
+trunk_col = ''
+leaf_col = ''
 bioms_list = ['grass', 'desert', 'rocky', 'snow']
 biom_choice = random.choice(bioms_list)
 if biom_choice == 'grass':
@@ -55,12 +73,15 @@ if biom_choice == 'grass':
     second_block = 'D'
     rb = 'D'
     trees = True
+    trunk_col = 'peru'
+    leaf_col = 'forestgreen'
 
 if biom_choice == 'desert':
     main_block = 'Sa'
     second_block = 'Sa'
     rb = 'Sa'
     trees = True
+    trunk_col = 'darkgreen'
 
 if biom_choice == 'rocky':
     main_block = 'S'
@@ -73,6 +94,8 @@ if biom_choice == 'snow':
     second_block = 'Sn'
     rb = 'Sn'
     trees = True
+    leaf_col = 'seagreen'
+    trunk_col = 'chocolate'
 
 RL = [' ', ' ', ' ', ' ', 'Di', 'Sa', 'S'] + [rb] * 60
 
@@ -168,12 +191,7 @@ if G1 == main_block:
 
 
 pos_list = []
-grass_list = []
-dirt_list = []
-stone_list = []
-diorite_list = []
-sand_list = []
-snow_list = []
+
 # Random Blocks in Stone Layers
 SLR = [ ' ', ' ', ' ', ' ', 'Di', 'Sa', 'D'] + ['S'] * 60
 
@@ -220,13 +238,13 @@ def maker():
 
     # Draws the block
     # Row
-    for x in range(15):
+    for x in range(26):
         penup()
         goto(-700, (200 - (x * 20)))
         pendown()
 
         # Column
-        for y in range(35):
+        for y in range(70):
             # Checks if the block is air or not
             air = False
 
@@ -235,36 +253,42 @@ def maker():
                 fillcolor('green')
                 block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
                 pos_list.append(block_pos)
+                grass_list.append(block_pos)
 
             # Dirt
             if map_list[x][y] == 'D':
                 fillcolor('SaddleBrown')
                 block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
                 pos_list.append(block_pos)
+                dirt_list.append(block_pos)
 
             # Stone
             elif map_list[x][y] == 'S':
                 fillcolor('cornsilk4')
                 block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
                 pos_list.append(block_pos)
+                stone_list.append(block_pos)
 
             # Diorite
             elif map_list[x][y] == 'Di':
                 fillcolor('gray80')
                 block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
                 pos_list.append(block_pos)
+                diorite_list.append(block_pos)
 
             # Sand
             elif map_list[x][y] == 'Sa':
                 fillcolor('khaki3')
                 block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
                 pos_list.append(block_pos)
+                sand_list.append(block_pos)
 
             # Snow
             elif map_list[x][y] == 'Sn':
                 fillcolor('white')
                 block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
                 pos_list.append(block_pos)
+                snow_list.append(block_pos)
 
             # Trees
             elif map_list[x][y] == 'T':
@@ -294,3 +318,43 @@ def maker():
 
 def map_blocks_pos():
     return pos_list
+
+
+def map_blocks_grass():
+    return grass_list
+
+
+def map_blocks_dirt():
+    return dirt_list
+
+
+def map_blocks_stone():
+    return stone_list
+
+
+def map_blocks_sand():
+    return sand_list
+
+
+def map_blocks_diorite():
+    return diorite_list
+
+
+def map_blocks_snow():
+    return snow_list
+
+
+def map_blocks_trunk():
+    return trunk_list
+
+
+def map_blocks_leaf():
+    return leaf_list
+
+
+def map_trunk_color():
+    return trunk_col
+
+
+def map_leaf_color():
+    return leaf_col

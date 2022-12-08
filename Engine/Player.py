@@ -19,7 +19,7 @@ def block_draw():
     build.penup()
 
 
-def control(position_list):
+def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite_list, snow_list, leaf_list, trunk_list, trunk_col, leaf_col):
     player = turtle.Pen()
     player.penup()
     player.goto(-10, 210)
@@ -29,6 +29,7 @@ def control(position_list):
     player.color('red')
     player.showturtle()
     jumped = False
+    block_choice = 'SaddleBrown'
     while True:
         # Restart Jump
         if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in position_list:
@@ -59,6 +60,107 @@ def control(position_list):
 
         if keyboard.is_pressed('s'):
             watching = 's'
+
+        if keyboard.is_pressed('ctrl'):
+            if watching == 'w':
+                if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in grass_list:
+                    block_choice = 'green'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in dirt_list:
+                    block_choice = 'SaddleBrown'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in stone_list:
+                    block_choice = 'cornsilk4'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in sand_list:
+                    block_choice = 'khaki3'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in diorite_list:
+                    block_choice = 'gray80'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in snow_list:
+                    block_choice = 'white'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in trunk_list:
+                    block_choice = trunk_col
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in leaf_list:
+                    block_choice = leaf_col
+
+            if watching == 'a':
+                if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in grass_list:
+                    block_choice = 'green'
+
+                if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in dirt_list:
+                    block_choice = 'SaddleBrown'
+
+                if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in stone_list:
+                    block_choice = 'cornsilk4'
+
+                if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in sand_list:
+                    block_choice = 'khaki3'
+
+                if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in diorite_list:
+                    block_choice = 'gray80'
+
+                if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in snow_list:
+                    block_choice = 'white'
+
+                if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in trunk_list:
+                    block_choice = trunk_col
+
+                if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in leaf_list:
+                    block_choice = leaf_col
+
+            if watching == 's':
+                if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in grass_list:
+                    block_choice = 'green'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in dirt_list:
+                    block_choice = 'SaddleBrown'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in stone_list:
+                    block_choice = 'cornsilk4'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in sand_list:
+                    block_choice = 'khaki3'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in diorite_list:
+                    block_choice = 'gray80'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in snow_list:
+                    block_choice = 'white'
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in trunk_list:
+                    block_choice = trunk_col
+
+                if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in leaf_list:
+                    block_choice = leaf_col
+
+            if watching == 'd':
+                if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in grass_list:
+                    block_choice = 'green'
+
+                if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in dirt_list:
+                    block_choice = 'SaddleBrown'
+
+                if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in stone_list:
+                    block_choice = 'cornsilk4'
+
+                if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in sand_list:
+                    block_choice = 'khaki3'
+
+                if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in diorite_list:
+                    block_choice = 'gray80'
+
+                if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in snow_list:
+                    block_choice = 'white'
+
+                if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in trunk_list:
+                    block_choice = trunk_col
+
+                if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in leaf_list:
+                    block_choice = leaf_col
 
         # Delete block
         if keyboard.is_pressed('delete'):
@@ -91,7 +193,7 @@ def control(position_list):
 
         # Build
         if keyboard.is_pressed('enter'):
-            build.fillcolor('SaddleBrown')
+            build.fillcolor(block_choice)
             build.pencolor('black')
 
             if watching == 'w' and f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' not in position_list:

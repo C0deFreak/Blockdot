@@ -31,7 +31,11 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
     jumped = False
     block_choice = 'SaddleBrown'
     corrupt = []
+
     while True:
+        position_list.sort()
+        corrupt.sort()
+
         # Restart Jump
         if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in position_list:
             jumped = False
@@ -41,6 +45,11 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
             time.sleep(0.2)
             player.goto(player.xcor(), player.ycor() - 20)
             jumped = True
+
+        # Corrupt Portal
+        if position_list == corrupt:
+            turtle.clear()
+            build.clear()
 
         # Moving right
         if keyboard.is_pressed('d'):
@@ -66,6 +75,9 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
         if keyboard.is_pressed('ctrl'):
             if watching == 'w':
                 if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in position_list:
+                    if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in leaf_list:
+                        block_choice = 'black'
+
                     if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in grass_list:
                         block_choice = 'green'
 
@@ -87,14 +99,11 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
                     if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in trunk_list:
                         block_choice = trunk_col
 
-                    if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in leaf_list:
-                        block_choice = leaf_col
-
-                    if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in leaf_list:
-                        block_choice = 'black'
-
             if watching == 'a':
                 if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in position_list:
+                    if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in corrupt:
+                        block_choice = 'black'
+
                     if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in grass_list:
                         block_choice = 'green'
 
@@ -119,11 +128,11 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
                     if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in leaf_list:
                         block_choice = leaf_col
 
-                    if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' in corrupt:
-                        block_choice = 'black'
-
             if watching == 's':
                 if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in position_list:
+                    if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in corrupt:
+                        block_choice = 'black'
+
                     if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in grass_list:
                         block_choice = 'green'
 
@@ -148,11 +157,11 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
                     if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in leaf_list:
                         block_choice = leaf_col
 
-                    if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in corrupt:
-                        block_choice = 'black'
-
             if watching == 'd':
                 if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in position_list:
+                    if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in corrupt:
+                        block_choice = 'black'
+
                     if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in grass_list:
                         block_choice = 'green'
 
@@ -176,9 +185,6 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
 
                     if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in leaf_list:
                         block_choice = leaf_col
-
-                    if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' in corrupt:
-                        block_choice = 'black'
 
         # Delete block
         if keyboard.is_pressed('delete'):

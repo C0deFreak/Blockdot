@@ -26,7 +26,6 @@ leaf_list = []
 
 def tree(leaf, trunk_color, leaf_color):
     trunk_size = random.randint(1, 4)
-    print(trunk_size)
     penup()
     setheading(90)
     forward(trunk_size * 20)
@@ -65,14 +64,12 @@ def tree(leaf, trunk_color, leaf_color):
         back(20)
         block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
         trunk_list.append(block_pos)
-        print(block_pos)
 
 
 trunk_col = ''
 leaf_col = ''
 bioms_list = ['grass', 'desert', 'rocky', 'snow']
 biom_choice = random.choice(bioms_list)
-biom_choice = 'grass'
 if biom_choice == 'grass':
     main_block = 'G'
     second_block = 'D'
@@ -243,13 +240,13 @@ def maker():
 
     # Draws the block
     # Row
-    for x in range(5):
+    for x in range(26):
         penup()
         goto(-700, (200 - (x * 20)))
         pendown()
 
         # Column
-        for y in range(35):
+        for y in range(70):
             # Checks if the block is air or not
             air = False
 

@@ -255,7 +255,8 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
                     leaf_list.append(f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)')
 
                 block_draw()
-
+                inventory_full = False
+                inventory.color('#8B8B8B')
 
             if watching == 'a' and f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' not in position_list:
                 build.penup()
@@ -287,6 +288,8 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
                     leaf_list.append(f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)')
 
                 block_draw()
+                inventory_full = False
+                inventory.color('#8B8B8B')
 
             if watching == 's' and f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' not in position_list:
                 build.penup()
@@ -318,6 +321,8 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
                     leaf_list.append(f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)')
 
                 block_draw()
+                inventory_full = False
+                inventory.color('#8B8B8B')
 
             if watching == 'd' and f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' not in position_list:
                 build.penup()
@@ -349,9 +354,8 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
                     leaf_list.append(f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)')
 
                 block_draw()
-
-            inventory_full = False
-            inventory.color('#8B8B8B')
+                inventory_full = False
+                inventory.color('#8B8B8B')
 
         # Jumping
         if keyboard.is_pressed('space') and not jumped:

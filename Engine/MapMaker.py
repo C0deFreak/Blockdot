@@ -36,6 +36,7 @@ def tree(leaf, trunk_color, leaf_color):
         fillcolor(leaf_color)
         block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
         leaf_list.append(block_pos)
+        pos_list.append(block_pos)
         block_draw()
         back(40)
         right(90)
@@ -44,6 +45,7 @@ def tree(leaf, trunk_color, leaf_color):
         for leafs in range(3):
             block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
             leaf_list.append(block_pos)
+            pos_list.append(block_pos)
             block_draw()
         back(40)
         right(90)
@@ -56,6 +58,7 @@ def tree(leaf, trunk_color, leaf_color):
     fillcolor(trunk_color)
     block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
     trunk_list.append(block_pos)
+    pos_list.append(block_pos)
     for trunk in range(trunk_size):
         block_draw()
         right(90)
@@ -64,6 +67,7 @@ def tree(leaf, trunk_color, leaf_color):
         back(20)
         block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
         trunk_list.append(block_pos)
+        pos_list.append(block_pos)
 
 IsG = 'G'
 IsD = 'D'
@@ -222,11 +226,9 @@ map_list = [[' '] * 70] * 8 + [
             [T1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1],
             ['RL'] * 70,
             * [['SLR'] * 70 for _ in range(21)]]   
-                    
 
-
-def maker():
-    # Sets up the scene
+# Sets up the scene                    
+def sceneMaker():
     bgcolor('#3776AB')
     setup(width=1.0, height=1.0)
     hideturtle()
@@ -257,6 +259,10 @@ def maker():
     pencolor('black')
     pensize(0)
 
+def maker():
+    # Set up te scene
+    sceneMaker()
+
     # Draws the block
     # Column
     for x in range(34):
@@ -269,6 +275,8 @@ def maker():
             # Checks if the block is air or not
             air = False
 
+            block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
+
             # Check if the block is from SLR(Stone Layer Random) list and if it is asign the correct block to it
             if map_list[x][y] == 'SLR':
                 map_list[x][y] =  random.choice(SLR)
@@ -280,47 +288,31 @@ def maker():
             # Grass
             if map_list[x][y] == 'G':
                 fillcolor('green')
-                block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-                pos_list.append(block_pos)
                 grass_list.append(block_pos)
-
             # Dirt
             elif map_list[x][y] == 'D':
                 fillcolor('SaddleBrown')
-                block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-                pos_list.append(block_pos)
                 dirt_list.append(block_pos)
-
             # Stone
             elif map_list[x][y] == 'S':
                 fillcolor('cornsilk4')
-                block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-                pos_list.append(block_pos)
                 stone_list.append(block_pos)
-
             # Diorite
             elif map_list[x][y] == 'Di':
                 fillcolor('gray80')
-                block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-                pos_list.append(block_pos)
                 diorite_list.append(block_pos)
-
             # Sand
             elif map_list[x][y] == 'Sa':
                 fillcolor('khaki3')
-                block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-                pos_list.append(block_pos)
                 sand_list.append(block_pos)
-
             # Snow
             elif map_list[x][y] == 'Sn':
                 fillcolor('white')
-                block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-                pos_list.append(block_pos)
                 snow_list.append(block_pos)
 
+            # Shorten the code by checking at specific property blocks
             # Trees
-            elif map_list[x][y] == 'T':
+            if map_list[x][y] == 'T':
                 if biom_choice == 'grass':
                     tree(leaf=True, leaf_color='forestgreen', trunk_color='peru')
 
@@ -339,6 +331,11 @@ def maker():
                 penup()
                 forward(20)
                 pendown()
+
+            # Append the collider(position) to normal blocks    
+            else:
+                pos_list.append(block_pos)
+
 
             # Skips this step if the block is air
             if not air:

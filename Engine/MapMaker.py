@@ -1,7 +1,7 @@
 from turtle import *
 import random
 
-
+# Function that draws the blocks on the canvas
 def block_draw():
     pendown()
     begin_fill()
@@ -13,7 +13,7 @@ def block_draw():
     forward(20)
     penup()
 
-
+# Lists of all of the blocks
 grass_list = []
 dirt_list = []
 stone_list = []
@@ -23,13 +23,16 @@ snow_list = []
 trunk_list = []
 leaf_list = []
 
+pos_list = []
 
+# Tree spawning function
 def tree(leaf, trunk_color, leaf_color):
     trunk_size = random.randint(1, 4)
     penup()
     setheading(90)
     forward(trunk_size * 20)
-
+    
+    # Makes the leaves of the tree
     if leaf:
         forward(40)
         right(90)
@@ -51,10 +54,12 @@ def tree(leaf, trunk_color, leaf_color):
         right(90)
         forward(20)
         left(90)
+    # Used for cactuses
     if not leaf:
         right(90)
         forward(20)
 
+    # Makes the truk of the tree
     fillcolor(trunk_color)
     block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
     trunk_list.append(block_pos)
@@ -69,163 +74,41 @@ def tree(leaf, trunk_color, leaf_color):
         trunk_list.append(block_pos)
         pos_list.append(block_pos)
 
-IsG = 'G'
-IsD = 'D'
-IsS = 'S'
-UbSa = 'Sa'
-UbG = 'G'
-UbA = ' '
 
+# Makes the bioms and chooses the properties for them
 trunk_col = ''
 leaf_col = ''
-bioms_list = ['grass', 'desert', 'rocky', 'snow']
+bioms_list = ['grass', 'snow', 'desert', 'rocky']
 biom_choice = random.choice(bioms_list)
+# Grass biom
 if biom_choice == 'grass':
     main_block = 'G'
-    second_block = 'D'
-    rb = 'D'
     trees = True
     leaf_col = 'forestgreen'
     trunk_col = 'peru'
-
+# Desert biom
 if biom_choice == 'desert':
     main_block = 'Sa'
-    second_block = 'Sa'
-    rb = 'Sa'
     trees = True
     trunk_col = 'darkgreen'
-    IsG = 'Sa'
-
+# Stone biom
 if biom_choice == 'rocky':
     main_block = 'S'
-    second_block = 'S'
-    rb = 'S'
     trees = False
-
+# Tundra biom
 if biom_choice == 'snow':
     main_block = 'Sn'
-    second_block = 'Sn'
-    rb = 'Sn'
     trees = True
     leaf_col = 'seagreen'
     trunk_col = 'chocolate'
-    UbSa = 'Sn'
-    IsG = 'Sn'
 
 
-RL = [' ', ' ', ' ', ' ', 'Di', 'Sa', 'S', 'D'] + [rb] * 60
-
-island = random.randint(0,1)
-if island == 0:
- IsS, IsD, IsG = ' ', ' ', ' '
-else:
-    UbG, UbSa, UbA = 'S', 'S', 'S'
-
-# Random hills
-G1_list = [' ', main_block, main_block, main_block]
-G2_list = [' ', main_block]
-G3_list = [' ']
-G4_list = [' ', ' ']
-G5_list = [' ', ' ', ' ']
-tree_list = [' ', 'T', 'T', 'T']
-tree_list2 = [' ']
-tree_list3 = [' ']
-tree_list4 = [' ']
-tree_list5 = [' ']
-
-G1 = ' '
-G2 = ' '
-G3 = ' '
-G4 = ' '
-G5 = ' '
-
-T1 = ' '
-T2 = ' '
-T3 = ' '
-T4 = ' '
-T5 = ' '
-
-G1 = random.choice(G1_list)
-T1 = random.choice(tree_list)
-if G1 == main_block:
-    G2_list.append(main_block)
-    if trees:
-        tree_list2.append('T')
-    else:
-        T1 = main_block
-
-    G2 = random.choice(G2_list)
-    T2 = random.choice(tree_list2)
-    if G2 == main_block:
-        G3_list.append(main_block)
-        if trees:
-            tree_list3.append('T')
-            T1 = main_block
-        else:
-            T1 = main_block
-            T2 = main_block
-
-        G3 = random.choice(G3_list)
-        T3 = random.choice(tree_list3)
-        if G3 == main_block:
-            G4_list.append(main_block)
-            G1 = second_block
-            if trees:
-                tree_list4.append('T')
-                T1 = second_block
-                T2 = main_block
-            else:
-                T1 = second_block
-                T2 = main_block
-                T3 = main_block
-
-            G4 = random.choice(G4_list)
-            T4 = random.choice(tree_list4)
-            if G4 == main_block:
-                G5_list.append(main_block)
-                G2 = second_block
-                if trees:
-                    tree_list5.append('T')
-                    T1 = second_block
-                    T2 = main_block
-                    T3 = main_block
-                else:
-                    T1 = second_block
-                    T2 = second_block
-                    T3 = main_block
-                    T4 = main_block
-
-                G5 = random.choice(G5_list)
-                T5 = random.choice(tree_list5)
-                if G5 == main_block:
-                    G3 = second_block
-                    if trees:
-                        T1 = second_block
-                        T2 = second_block
-                        T3 = main_block
-                        T4 = main_block
-                    else:
-                        T1 = second_block
-                        T2 = second_block
-                        T3 = second_block
-                        T4 = main_block
-                        T5 = main_block
-
-
-pos_list = []
-
-# Random Blocks in Stone Layers
-SLR = [ ' ', ' ', ' ', ' '] * 1 + ['Di'] + ['Sa'] + ['D'] + ['S'] * 90
+# Random Blocks in Stone Layers and normal layers
+SLR = [' '] * 4  + ['Di'] + ['Sa'] + ['D'] + ['S'] * 90
+RL = [' '] * 4  + ['Di'] + ['Sa'] + ['D'] * 10 + [main_block] * 25 + ['S'] * 25
 
 # Terrain
-map_list = [[' '] * 70] * 8 + [
-            [' ', ' ', ' ', ' ', ' ', G5, T5, ' ', ' ', ' ', G5, G4, G4, G5, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', G5, G5, G5, ' ', ' ', ' ', ' ', ' ', G5, G4, G5, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', G5, G5, T3, G4, G5, ' ', G5, G4, G3, G3, G4, G4, G5, ' ', ' ', ' ', ' ', ' ', G5, T5, ' ', ' ', ' ', ' ', G5, G4, G4, G3, G3, G4, G5, G5, G4, G4, G3, G3, G3, T4, G5, G5, G5, ' ', G5, G4, G5, ' ', ' ', ' ', ' ', ' ', G5, G5, G4, G4, G4, G3, G4, T5, G5, ' ', ' ', ' ', G5, G4, G5, ' ', ' ', ' ', ' '],
-            [T5, G5, G5, G4, G4, G3, G3, T2, G5, G4, G3, G2, G2, G3, G4, G4, G4, G5, T3, G5, G5, G4, G3, G4, G5, G5, G4, G3, G3, T3, G3, G2, G2, G3, G4, T2, G2, G2, G2, G2, G2, G3, G3, G4, G5, G4, G3, G4, G5, G5, G4, G3, G3, G3, G2, G2, G2, G2, G2, G3, G4, G5, G5, G4, G4, G3, G4, G5, ' ', ' ', ' ', ' '],
-            [G3, G3, G3, G3, G3, G3, G2, G2, G2, G2, G1, G1, G1, G1, G1, G2, G2, G3, G2, G3, G3, T1, G2, G3, G4, G2, G2, G2, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G2, G3, G3, G2, G2, G3, G4, T1, G2, G2, G2, G2, G1, G1, G1, G1, G1, G1, G1, G2, G3, G3, G2, G2, G3, G4, G5, ' ', ' '],
-            [T1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, G1, random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), random.choice(RL), G1, G1, G1, G1, G1, G1, G1, G1, G1, G1],
-            ['RL'] * 70,
-            * [['SLR'] * 70 for _ in range(21)]]   
+map_list = [['PG'] * 70 for _ in range(5)] + [['RL'] * 70] + [['SLR'] * 70 for _ in range(21)]
 
 # Sets up the scene                    
 def sceneMaker():
@@ -265,9 +148,9 @@ def maker():
 
     # Draws the block
     # Column
-    for x in range(34):
+    for x in range(26):
         penup()
-        goto(-700, (280 - (x * 20)))
+        goto(-700, (120 - (x * 20)))
         pendown()
 
         # Row
@@ -280,10 +163,54 @@ def maker():
             # Check if the block is from SLR(Stone Layer Random) list and if it is asign the correct block to it
             if map_list[x][y] == 'SLR':
                 map_list[x][y] =  random.choice(SLR)
-
             # Check if the block is from RL(Random Layer) list and if it is asign the correct block to it
             if map_list[x][y] == 'RL':
                 map_list[x][y] =  random.choice(RL)
+
+            # Procedural generation blocks
+            if map_list[x][y] == 'PG':
+                # Chance of a block spawning
+                spawn_chance = 7
+                
+                # Spawns a block if there is one above it
+                if map_list[x - 1][y] == main_block:
+                    map_list[x][y] = main_block
+                
+                # Spawns a block right of the block that is spawned by the last function
+                elif y > 0 and map_list[x - 1][y - 1] == main_block:
+                    map_list[x][y] = main_block
+                
+                # Spawns a block left of the block that is spawned by the last function
+                elif y < 69 and map_list[x - 1][y + 1] == main_block:
+                    map_list[x][y] = main_block
+
+                # If the block is spawned normally this gives it a chance of spawning
+                else:
+                    if main_block in map_list[x - 1]:
+                        spawn_chance += 7
+                        if main_block in map_list[x - 2]:
+                            spawn_chance += 7
+                            if main_block in map_list[x - 3]:
+                                spawn_chance += 7
+                                if main_block in map_list[x - 4]:
+                                    spawn_chance += 6
+
+                    # More chance of a block spawning if it is surrounded by other blocks
+                    if 0 < y < 69 and map_list[x][y - 1] == main_block and map_list[x][y + 1] == main_block:
+                        spawn_chance = spawn_chance * 2
+                    # More chance of air spawning if it is surrounded by air
+                    if 0 < y < 69 and map_list[x][y - 1] != main_block and map_list[x][y + 1] != main_block:
+                        spawn_chance = int(spawn_chance / 2)
+                
+                    # Choosing if the block should spawn
+                    spawn_choice = random.randint(1, 70)
+                    if spawn_choice <= spawn_chance:
+                        map_list[x][y] = main_block
+                    elif spawn_chance > 20 and map_list[x - 2][y - 1] != main_block and map_list[x - 1][y - 1] != main_block:
+                        map_list[x][y] = 'T'
+                    else:
+                        map_list[x][y] = ' '
+                
 
             # Grass
             if map_list[x][y] == 'G':
@@ -340,5 +267,4 @@ def maker():
             # Skips this step if the block is air
             if not air:
                 block_draw()
-
 

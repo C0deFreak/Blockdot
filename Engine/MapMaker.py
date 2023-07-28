@@ -76,31 +76,13 @@ def tree(leaf, trunk_color, leaf_color):
 
 
 # Makes the bioms and chooses the properties for them
-trunk_col = ''
-leaf_col = ''
-bioms_list = ['grass', 'snow', 'desert', 'rocky']
-biom_choice = random.choice(bioms_list)
-# Grass biom
-if biom_choice == 'grass':
-    main_block = 'G'
-    trees = True
-    leaf_col = 'forestgreen'
-    trunk_col = 'peru'
-# Desert biom
-if biom_choice == 'desert':
-    main_block = 'Sa'
-    trees = True
-    trunk_col = 'darkgreen'
-# Stone biom
-if biom_choice == 'rocky':
-    main_block = 'S'
-    trees = False
-# Tundra biom
-if biom_choice == 'snow':
-    main_block = 'Sn'
-    trees = True
-    leaf_col = 'seagreen'
-    trunk_col = 'chocolate'
+# Options: leaf spawning, leaf color, trunk color, tree spawning, main block, 
+biom_list = [[True, 'forestgreen', 'peru', True, 'G'],  # GRASS
+                  [True, 'seagreen', 'chocolate', True, 'Sn'],  # SNOW
+                  [False, 'forestgreen', 'darkgreen', True, 'Sa'],  # DESERT
+                  [True, 'forestgreen', 'peru', False, 'S']]    # ROCKY
+biom_choice = random.choice(biom_list)
+main_block = biom_choice[4]
 
 
 # Random Blocks in Stone Layers and normal layers
@@ -155,9 +137,10 @@ def maker():
 
         # Row
         for y in range(70):
-            # Checks if the block is air or not
+            # Goes with the assumption that the block is not air
             air = False
 
+            # Block coordinates
             block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
 
             # Check if the block is from SLR(Stone Layer Random) list and if it is asign the correct block to it
@@ -169,11 +152,15 @@ def maker():
 
             # Procedural generation blocks
             if map_list[x][y] == 'PG':
+
                 # Chance of a block spawning
-                spawn_chance = 7
+                block_chance = 7
+                tree_chance = 5
+                air_chance = 49
+                spawn_chance_list = [' '] * air_chance + ['T'] * tree_chance + [main_block] * block_chance
                 
                 # Spawns a block if there is one above it
-                if map_list[x - 1][y] == main_block:
+                if map_list[x - 1][y] == main_block or map_list[x - 1][y] == 'T':
                     map_list[x][y] = main_block
                 
                 # Spawns a block right of the block that is spawned by the last function
@@ -184,33 +171,43 @@ def maker():
                 elif y < 69 and map_list[x - 1][y + 1] == main_block:
                     map_list[x][y] = main_block
 
-                # If the block is spawned normally this gives it a chance of spawning
+                # If the block is should be spawned normally this gives it a chance of spawning
                 else:
                     if main_block in map_list[x - 1]:
-                        spawn_chance += 7
+                        block_chance += 7
+                        air_chance -= 7
                         if main_block in map_list[x - 2]:
-                            spawn_chance += 7
+                            block_chance += 7
+                            air_chance -= 7
                             if main_block in map_list[x - 3]:
-                                spawn_chance += 7
+                                block_chance += 7
+                                air_chance -= 7
                                 if main_block in map_list[x - 4]:
-                                    spawn_chance += 6
+                                    block_chance += 6
+                                    air_chance -= 6
 
                     # More chance of a block spawning if it is surrounded by other blocks
                     if 0 < y < 69 and map_list[x][y - 1] == main_block and map_list[x][y + 1] == main_block:
-                        spawn_chance = spawn_chance * 2
+                        block_chance = block_chance * 2
                     # More chance of air spawning if it is surrounded by air
                     if 0 < y < 69 and map_list[x][y - 1] != main_block and map_list[x][y + 1] != main_block:
-                        spawn_chance = int(spawn_chance / 2)
+                        block_chance = int(block_chance / 2)
                 
-                    # Choosing if the block should spawn
-                    spawn_choice = random.randint(1, 70)
-                    if spawn_choice <= spawn_chance:
-                        map_list[x][y] = main_block
-                    elif spawn_chance > 20 and map_list[x - 2][y - 1] != main_block and map_list[x - 1][y - 1] != main_block:
-                        map_list[x][y] = 'T'
+                    # Choosing what block(air, tree, main block) should spawn
+                    spawn_choice = random.choice(spawn_chance_list)
+
+                    # Spawns trees by chance, biom, position. If the choice is not a tree it continiues as normal
+                    if spawn_choice == 'T':
+                        if biom_choice[3] == True:
+                            if (map_list[x - 1][y] != 'SLR') or (map_list[x - 1][y - 1] != 'SLR') or (map_list[x - 2][y - 1] != 'SLR'):
+                                map_list[x][y] = ' '
+                            else:
+                                map_list[x][y] = 'T'
+                        else:
+                            map_list[x][y] = ' '
                     else:
-                        map_list[x][y] = ' '
-                
+                        map_list[x][y] = spawn_choice
+
 
             # Grass
             if map_list[x][y] == 'G':
@@ -237,20 +234,9 @@ def maker():
                 fillcolor('white')
                 snow_list.append(block_pos)
 
-            # Shorten the code by checking at specific property blocks
-            # Trees
+            # Trees spawning and its properties
             if map_list[x][y] == 'T':
-                if biom_choice == 'grass':
-                    tree(leaf=True, leaf_color='forestgreen', trunk_color='peru')
-
-                if biom_choice == 'desert':
-                    tree(leaf=False, leaf_color='forestgreen', trunk_color='darkgreen')
-
-                if biom_choice == 'rocky':
-                    tree(leaf=True, leaf_color='forestgreen', trunk_color='peru')
-
-                if biom_choice == 'snow':
-                    tree(leaf=True, leaf_color='seagreen', trunk_color='chocolate')
+                tree(leaf=biom_choice[0], leaf_color=biom_choice[1], trunk_color=biom_choice[2])
 
             # Air
             elif map_list[x][y] == ' ':

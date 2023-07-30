@@ -86,8 +86,7 @@ main_block = biom_choice[4]
 
 
 # Random Blocks in Stone Layers and normal layers
-SLR = [' '] * 4  + ['Di'] + ['Sa'] + ['D'] + ['S'] * 90
-RL = [' '] * 4  + ['Di'] + ['Sa'] + ['D'] * 10 + [main_block] * 25 + ['S'] * 25
+RL = [' ']  + ['Di'] * 5 + ['Sa'] * 5 + ['D'] * 10 * 5 + [main_block] * 25 * 5 + ['S'] * 25 * 5
 
 # Terrain
 map_list = [['PG'] * 70 for _ in range(5)] + [['RL'] * 70] + [['SLR'] * 70 for _ in range(21)]
@@ -145,7 +144,24 @@ def maker():
 
             # Check if the block is from SLR(Stone Layer Random) list and if it is asign the correct block to it
             if map_list[x][y] == 'SLR':
+                air_amount = 2
+                material_amount = 5
+                if x < 25 and y < 69:
+                    # Procedural generation for caves
+                    if (map_list[x][y - 1] == ' ') or (map_list[x - 1][y] == ' '):
+                        air_amount = int(270 * 3.5)
+
+                    if (map_list[x][y - 1] == ' ') and (map_list[x - 1][y] == ' '):
+                        material_amount = 1
+                    
+                    if (map_list[x - 1][y] != ' ') and (' ' in map_list[x - 1][y:]) and (' ' in map_list[x - 1][:y]):
+                        air_amount = 0
+
+                SLR = [' '] * air_amount  + ['Di'] * material_amount + ['Sa'] * material_amount + ['D'] * material_amount + ['S'] * (material_amount * 90)
                 map_list[x][y] =  random.choice(SLR)
+                
+                      
+
             # Check if the block is from RL(Random Layer) list and if it is asign the correct block to it
             if map_list[x][y] == 'RL':
                 map_list[x][y] =  random.choice(RL)
@@ -199,7 +215,7 @@ def maker():
                     # Spawns trees by chance, biom, position. If the choice is not a tree it continiues as normal
                     if spawn_choice == 'T':
                         if biom_choice[3] == True:
-                            if (map_list[x - 1][y] != 'SLR') or (map_list[x - 1][y - 1] != 'SLR') or (map_list[x - 2][y - 1] != 'SLR'):
+                            if (map_list[x - 1][y] != 'SLR') or (map_list[x][y - 1] != ' '):
                                 map_list[x][y] = ' '
                             else:
                                 map_list[x][y] = 'T'

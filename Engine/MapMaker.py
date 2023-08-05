@@ -13,16 +13,8 @@ def block_draw():
     forward(20)
     penup()
 
-# Lists of all of the blocks
-grass_list = []
-dirt_list = []
-stone_list = []
-diorite_list = []
-sand_list = []
-snow_list = []
-trunk_list = []
-leaf_list = []
-
+# Lists of all of the blocks and their positions
+block_list = []
 pos_list = []
 
 # Tree spawning function
@@ -38,7 +30,7 @@ def tree(leaf, trunk_color, leaf_color):
         right(90)
         fillcolor(leaf_color)
         block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-        leaf_list.append(block_pos)
+        block_list.append(leaf_color)
         pos_list.append(block_pos)
         block_draw()
         back(40)
@@ -47,7 +39,7 @@ def tree(leaf, trunk_color, leaf_color):
         left(90)
         for leafs in range(3):
             block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-            leaf_list.append(block_pos)
+            block_list.append(leaf_color)
             pos_list.append(block_pos)
             block_draw()
         back(40)
@@ -57,12 +49,11 @@ def tree(leaf, trunk_color, leaf_color):
     # Used for cactuses
     if not leaf:
         right(90)
-        forward(20)
 
     # Makes the truk of the tree
     fillcolor(trunk_color)
     block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-    trunk_list.append(block_pos)
+    block_list.append(trunk_color)
     pos_list.append(block_pos)
     for trunk in range(trunk_size):
         block_draw()
@@ -71,22 +62,22 @@ def tree(leaf, trunk_color, leaf_color):
         left(90)
         back(20)
         block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-        trunk_list.append(block_pos)
+        block_list.append(trunk_color)
         pos_list.append(block_pos)
 
 
 # Makes the bioms and chooses the properties for them
 # Options: leaf spawning, leaf color, trunk color, tree spawning, main block, 
-biom_list = [[True, 'forestgreen', 'peru', True, 'G'],  # GRASS
-                  [True, 'seagreen', 'chocolate', True, 'Sn'],  # SNOW
-                  [False, 'forestgreen', 'darkgreen', True, 'Sa'],  # DESERT
-                  [True, 'forestgreen', 'peru', False, 'S']]    # ROCKY
+biom_list = [[True, 'forestgreen', 'peru', True, 'green'],  # GRASS
+                  [True, 'seagreen', 'chocolate', True, 'white'],  # SNOW
+                  [False, 'forestgreen', 'darkgreen', True, 'khaki3'],  # DESERT
+                  [True, 'forestgreen', 'peru', False, 'cornsilk4']]    # ROCKY
 biom_choice = random.choice(biom_list)
 main_block = biom_choice[4]
 
 
 # Random Blocks in Stone Layers and normal layers
-RL = [' ']  + ['Di'] * 5 + ['Sa'] * 5 + ['D'] * 10 * 5 + [main_block] * 25 * 5 + ['S'] * 25 * 5
+RL = [' ']  + ['gray80'] * 5 + ['khaki3'] * 5 + ['SaddleBrown'] * 10 * 5 + [main_block] * 25 * 5 + ['cornsilk4'] * 25 * 5
 
 # Terrain
 map_list = [['PG'] * 70 for _ in range(5)] + [['RL'] * 70] + [['SLR'] * 70 for _ in range(21)]
@@ -102,26 +93,23 @@ def sceneMaker():
     penup()
     goto(-700, 340)
     pendown()
+
+    # Draw the border inventory
     color('#C6C6C6')
     begin_fill()
-    for slot in range(4):
+    for _ in range(4):
         fd(48)
         rt(90)
     end_fill()
-    penup()
-    goto(-699, 339)
+
+    # Draw the background inventory
     pencolor('black')
     fillcolor('#8B8B8B')
-    pendown()
     begin_fill()
-    for slot1 in range(4):
+    for _ in range(4):
         fd(44)
         rt(90)
     end_fill()
-
-    setheading(0)
-    pencolor('black')
-    pensize(0)
 
 def maker():
     # Set up te scene
@@ -148,26 +136,26 @@ def maker():
                 material_amount = 5
                 if x < 25 and y < 69:
                     # Procedural generation for caves
+                    # Make chance of air spawning big if it is touching another block and lower the block chances
                     if (map_list[x][y - 1] == ' ') or (map_list[x - 1][y] == ' '):
                         air_amount = int(270 * 3.5)
-
-                    if (map_list[x][y - 1] == ' ') and (map_list[x - 1][y] == ' '):
                         material_amount = 1
-                    
+
+                    # Stopping bloks from floating
                     if (map_list[x - 1][y] != ' ') and (' ' in map_list[x - 1][y:]) and (' ' in map_list[x - 1][:y]):
                         air_amount = 0
 
-                SLR = [' '] * air_amount  + ['Di'] * material_amount + ['Sa'] * material_amount + ['D'] * material_amount + ['S'] * (material_amount * 90)
+                SLR = [' '] * air_amount  + ['gray80'] * material_amount + ['khaki3'] * material_amount + ['SaddleBrown'] * material_amount + ['cornsilk4'] * (material_amount * 90)
                 map_list[x][y] =  random.choice(SLR)
                 
                       
 
             # Check if the block is from RL(Random Layer) list and if it is asign the correct block to it
-            if map_list[x][y] == 'RL':
+            elif map_list[x][y] == 'RL':
                 map_list[x][y] =  random.choice(RL)
 
             # Procedural generation blocks
-            if map_list[x][y] == 'PG':
+            elif map_list[x][y] == 'PG':
 
                 # Chance of a block spawning
                 block_chance = 7
@@ -179,35 +167,14 @@ def maker():
                 if map_list[x - 1][y] == main_block or map_list[x - 1][y] == 'T':
                     map_list[x][y] = main_block
                 
-                # Spawns a block right of the block that is spawned by the last function
-                elif y > 0 and map_list[x - 1][y - 1] == main_block:
-                    map_list[x][y] = main_block
-                
-                # Spawns a block left of the block that is spawned by the last function
-                elif y < 69 and map_list[x - 1][y + 1] == main_block:
+                # Spawns a block right or left of the block that is spawned by the last function
+                elif (y > 0 and map_list[x - 1][y - 1] == main_block) or (y < 69 and map_list[x - 1][y + 1] == main_block):
                     map_list[x][y] = main_block
 
                 # If the block is should be spawned normally this gives it a chance of spawning
                 else:
-                    if main_block in map_list[x - 1]:
-                        block_chance += 7
-                        air_chance -= 7
-                        if main_block in map_list[x - 2]:
-                            block_chance += 7
-                            air_chance -= 7
-                            if main_block in map_list[x - 3]:
-                                block_chance += 7
-                                air_chance -= 7
-                                if main_block in map_list[x - 4]:
-                                    block_chance += 6
-                                    air_chance -= 6
-
-                    # More chance of a block spawning if it is surrounded by other blocks
-                    if 0 < y < 69 and map_list[x][y - 1] == main_block and map_list[x][y + 1] == main_block:
-                        block_chance = block_chance * 2
-                    # More chance of air spawning if it is surrounded by air
-                    if 0 < y < 69 and map_list[x][y - 1] != main_block and map_list[x][y + 1] != main_block:
-                        block_chance = int(block_chance / 2)
+                    block_chance = 7 + (6 * x)
+                    air_chance = 49 - (6 * x) 
                 
                     # Choosing what block(air, tree, main block) should spawn
                     spawn_choice = random.choice(spawn_chance_list)
@@ -225,31 +192,6 @@ def maker():
                         map_list[x][y] = spawn_choice
 
 
-            # Grass
-            if map_list[x][y] == 'G':
-                fillcolor('green')
-                grass_list.append(block_pos)
-            # Dirt
-            elif map_list[x][y] == 'D':
-                fillcolor('SaddleBrown')
-                dirt_list.append(block_pos)
-            # Stone
-            elif map_list[x][y] == 'S':
-                fillcolor('cornsilk4')
-                stone_list.append(block_pos)
-            # Diorite
-            elif map_list[x][y] == 'Di':
-                fillcolor('gray80')
-                diorite_list.append(block_pos)
-            # Sand
-            elif map_list[x][y] == 'Sa':
-                fillcolor('khaki3')
-                sand_list.append(block_pos)
-            # Snow
-            elif map_list[x][y] == 'Sn':
-                fillcolor('white')
-                snow_list.append(block_pos)
-
             # Trees spawning and its properties
             if map_list[x][y] == 'T':
                 tree(leaf=biom_choice[0], leaf_color=biom_choice[1], trunk_color=biom_choice[2])
@@ -263,6 +205,8 @@ def maker():
 
             # Append the collider(position) to normal blocks    
             else:
+                fillcolor(map_list[x][y])
+                block_list.append(map_list[x][y])
                 pos_list.append(block_pos)
 
 

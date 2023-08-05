@@ -1,6 +1,8 @@
 import keyboard
 import turtle
 import time
+from Engine import MapMaker
+import sys
 
 build = turtle.Pen()
 build.hideturtle()
@@ -20,7 +22,7 @@ def block_draw():
     build.penup()
 
 
-def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite_list, snow_list, leaf_list, trunk_list, trunk_col, leaf_col):
+def control():
 
     # Player object setup
     player = turtle.Pen()
@@ -42,85 +44,63 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
     inventory.penup()
     inventory.goto(-677, 317)
     inventory_full = False
+    build.penup()
 
     while True:
-        position_list.sort()
+
+        # Exit the program
+        if keyboard.is_pressed('esc'):
+            sys.exit(0)
 
         # Restart Jump
-        if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in position_list:
+        if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' in MapMaker.pos_list:
             jumped = False
 
         # Gravity
-        if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' not in position_list:
+        if f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)' not in MapMaker.pos_list:
             time.sleep(0.2)
             player.goto(player.xcor(), player.ycor() - 20)
             jumped = True
 
         # Moving right and assign the watch position
         if keyboard.is_pressed('d'):
-            if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' not in position_list:
+            if f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)' not in MapMaker.pos_list:
                 player.goto((player.xcor() + 20), player.ycor())
                 time.sleep(0.2)
-            watching = 'd'
+            position_str = f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)'
+            build_destination = player.xcor() + 10, player.ycor() + 10
 
         # Moving left and assign the watch position
         if keyboard.is_pressed('a'):
-            if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' not in position_list:
+            if f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)' not in MapMaker.pos_list:
                 player.goto((player.xcor() - 20), player.ycor())
                 time.sleep(0.2)
-            watching = 'a'
+            position_str = f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)'
+            build_destination = player.xcor() - 30, player.ycor() + 10
 
         # Assign the upper watch position
         if keyboard.is_pressed('w'):
-            watching = 'w'
+            position_str = f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)'   
+            build_destination= player.xcor() - 10, player.ycor() + 30 
 
         # Assign the bottom watch position
         if keyboard.is_pressed('s'):
-            watching = 's'
+            position_str = f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)'
+            build_destination = player.xcor() - 10, player.ycor() - 10
+
 
 
         # Delete block
-        if keyboard.is_pressed('F') and not inventory_full:
-            build.penup()
-
+        if keyboard.is_pressed('F') and not inventory_full:                
+            
             # Check the position you are looking at
-            if watching == 'w':
-                build.goto(player.xcor() - 10, player.ycor() + 30)
-                position_str = f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)'        
-
-            if watching == 'a':
-                build.goto(player.xcor() - 30, player.ycor() + 10)
-                position_str = f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)'
-
-            if watching == 's':
-                build.goto(player.xcor() - 10, player.ycor() - 10)
-                position_str = f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)'
-
-            if watching == 'd':
-                build.goto(player.xcor() + 10, player.ycor() + 10)
-                position_str = f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)'
-                    
-            # Append the correct block to the inventory
-            if position_str in leaf_list:
-                block_choice = leaf_col
-            elif position_str in grass_list:
-                block_choice = 'green'
-            elif position_str in dirt_list:
-                block_choice = 'SaddleBrown'
-            elif position_str in stone_list:
-                block_choice = 'cornsilk4'
-            elif position_str in sand_list:
-                block_choice = 'khaki3'
-            elif position_str in diorite_list:
-                block_choice = 'gray80'
-            elif position_str in snow_list:
-                block_choice = 'white'
-            elif position_str in trunk_list:
-                block_choice = trunk_col
+            build.goto(build_destination)
 
             # Remove the block from the canvas
-            if position_str in position_list:
-                position_list.remove(position_str)
+            if position_str in MapMaker.pos_list:
+                block_choice = MapMaker.block_list[MapMaker.pos_list.index(position_str)]
+                del MapMaker.block_list[MapMaker.pos_list.index(position_str)]
+                MapMaker.pos_list.remove(position_str)
                 inventory_full = True
                 build.color('#3776AB')
                 block_draw()
@@ -137,44 +117,16 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
             build.penup()
 
             # Check the position you are looking at
-            if watching == 'w':
-                build.goto(player.xcor() - 10, player.ycor() + 30)
-                position_str = f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)'
-
-            if watching == 'a':
-                build.goto(player.xcor() - 30, player.ycor() + 10)
-                position_str = f'({int(player.xcor() - 20)}.00,{int(player.ycor())}.00)'
-
-            if watching == 's':
-                build.goto(player.xcor() - 10, player.ycor() - 10)
-                position_str = f'({int(player.xcor())}.00,{int(player.ycor() - 20)}.00)'
-
-            if watching == 'd':
-                build.goto(player.xcor() + 10, player.ycor() + 10)
-                position_str = f'({int(player.xcor() + 20)}.00,{int(player.ycor())}.00)'
+            build.goto(build_destination)
+               
 
             # Check if there is any block at the checked position
-            if position_str not in position_list:
+            if position_str not in MapMaker.pos_list:
 
                 # Add the block from the inventory to its list and position list
-                position_list.append(position_str)
-                if block_choice == 'green':
-                    grass_list.append(position_str)
-                if block_choice == 'SaddleBrown':
-                    dirt_list.append(position_str)
-                if block_choice == 'cornsilk4':
-                    stone_list.append(position_str)
-                if block_choice == 'khaki3':
-                    sand_list.append(position_str)
-                if block_choice == 'gray80':
-                    diorite_list.append(position_str)
-                if block_choice == 'white':
-                    snow_list.append(position_str)
-                if block_choice == trunk_col:
-                    trunk_list.append(position_str)
-                if block_choice == leaf_col:
-                    leaf_list.append(position_str)
-                
+                MapMaker.pos_list.append(position_str)
+                MapMaker.block_list.append(block_choice)
+            
                 # Add the block to the canvas and remove it from the inventory
                 block_draw()
                 inventory_full = False
@@ -185,9 +137,9 @@ def control(position_list, grass_list, dirt_list, stone_list, sand_list, diorite
             time.sleep(0.1)
 
             # Check how high can the player jump
-            if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in position_list:
+            if f'({int(player.xcor())}.00,{int(player.ycor() + 20)}.00)' in MapMaker.pos_list:
                 high = 0
-            elif f'({int(player.xcor())}.00,{int(player.ycor() + 40)}.00)' in position_list:
+            elif f'({int(player.xcor())}.00,{int(player.ycor() + 40)}.00)' in MapMaker.pos_list:
                 high = 1
             else:
                 high = 2

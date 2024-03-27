@@ -162,6 +162,7 @@ def maker():
                 tree_chance = 5
                 air_chance = 49
                 spawn_chance_list = [' '] * air_chance + ['T'] * tree_chance + [main_block] * block_chance
+                cliff = [main_block] * 9 + [' ']
                 
                 # Spawns a block if there is one above it
                 if map_list[x - 1][y] == main_block or map_list[x - 1][y] == 'T':
@@ -169,7 +170,7 @@ def maker():
                 
                 # Spawns a block right or left of the block that is spawned by the last function
                 elif (y > 0 and map_list[x - 1][y - 1] == main_block) or (y < 69 and map_list[x - 1][y + 1] == main_block):
-                    map_list[x][y] = main_block
+                    map_list[x][y] = random.choice(cliff)
 
                 # If the block is should be spawned normally this gives it a chance of spawning
                 else:

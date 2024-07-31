@@ -66,7 +66,7 @@ biom_list = [[True, 'spring leaf', 'bark', True, 'grass', [[' ', 'X', ' '],
 
 biom_choice = random.choice(biom_list)
 main_block = biom_choice[4]
-block_size = 20
+block_size = 10
 
 block_dic = {'air' : '#3776AB',
              'diorite' : 'gray80',
@@ -88,14 +88,13 @@ pos_list = []
 simple_list = []
 xcor = 0
 ycor = 0
-width = 96
-height = 48
+width = 192
+height = 96
+grass_layer = 2
 
 # Random Blocks in Stone Layers and normal layers
 RL = ['air']  + ['diorite'] * 5 + ['sand'] * 5 + ['dirt'] * 10 * 5 + [main_block] * 25 * 5 + ['stone'] * 25 * 5
 
-# Terrain
-map_list = [['PG'] * width for _ in range(5)] + [['RL'] * width] + [['SLR'] * width for _ in range(height - 6)]
 
 # Sets up the scene                    
 def sceneMaker():
@@ -111,9 +110,8 @@ def simpleMaker():
         for x in range(width):
             if y < 5:
                 if y > 0 and simple_list[y - 1][x] == 'block':
-
                     simple_list[y].append('block')
-                elif y > 0 and (x > 0 and map_list[y - 1][x - 1] == main_block) or (x < width - 1 and map_list[y - 1][x + 1] == main_block):
+                elif y > 0 and ((x > 0 and simple_list[y - 1][x - 1] == 'block') or (x < width - 1 and simple_list[y - 1][x + 1] == 'block')):
                     if random.randrange(1, 11) > 9:
                         simple_list[y].append('air')
                     else:
@@ -130,14 +128,13 @@ def simpleMaker():
                     simple_list[y].append('block')
 
 
-
 def maker():
     global ycor
     global xcor
     block_color = 'air'
+
     # Set up te scene
     simpleMaker()
-    print(simple_list)
     sceneMaker()
 
     # Draws the block
@@ -145,86 +142,52 @@ def maker():
     for y in range(height):
         xcor = block_size / 2
         ycor = 8 * block_size + (y * block_size)
-
         # Row
         for x in range(width):
-            # Goes with the assumption that the block is not air
-            air = False
-
             # Block coordinates
             #block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-
             # Check if the block is from SLR(Stone Layer Random) list and if it is asign the correct block to it
-            if map_list[y][x] == 'SLR':
+
+            # Procedural generation blocks
+            if y < 6 and (y - 2 < 0 or simple_list[y - 2][x] == 'air'):
+                if simple_list[y][x] == 'block':
+                    spawn_chance_list = ['T'] * 1 + [main_block] * 10
+                    if random.choice(spawn_chance_list) == 'T' and (y == 0 or simple_list[y - 1][x] == 'air'):
+                        simple_list[y][x] = 'T'
+                    else:
+                        simple_list[y][x] = main_block
+
+            else:
                 air_amount = 2
                 material_amount = 5
                 if y < height - 1 and x < width - 1:
                     # Procedural generation for caves
                     # Make chance of air spawning big if it is touching another block and lower the block chances
-                    if (map_list[y][x - 1] == 'air') or (map_list[y - 1][x] == 'air'):
+                    if simple_list[y][x - 1] == 'air' or simple_list[y - 1][x] == 'air' or simple_list[y][x + 1] == 'air' or simple_list[y + 1][x] == 'air':
                         air_amount = int(270 * 3.5)
                         material_amount = 1
 
                     # Stopping bloks from floating
-                    if (map_list[y - 1][x] != 'air') and ('air' in map_list[y - 1][x:]) and ('air' in map_list[y - 1][:x]):
+                    if (simple_list[y - 1][x] != 'air') and ('air' in simple_list[y - 1][x:]) and ('air' in simple_list[y - 1][:x]):
                         air_amount = 0
+                    
+                    if simple_list[y - 2][x] == 'air' and simple_list[y - 2][x - 1] != 'air' and simple_list[y - 2][x + 1] != 'air':
+                        air_amount = 10
 
-                SLR = ['air'] * air_amount  + ['diorite'] * material_amount + ['sand'] * material_amount + ['dirt'] * material_amount + ['stone'] * (material_amount * 90)
-                map_list[y][x] = random.choice(SLR)
+                if simple_list[y][x] == 'block':
+                    SLR = ['air'] * air_amount  + ['diorite'] * material_amount + ['sand'] * material_amount + ['dirt'] * material_amount + ['stone'] * (material_amount * 90)
+                    simple_list[y][x] = random.choice(SLR)
                 
                       
 
-            # Check if the block is from RL(Random Layer) list and if it is asign the correct block to it
-            elif map_list[y][x] == 'RL':
-                map_list[y][x] = random.choice(RL)
-
-            # Procedural generation blocks
-            elif map_list[y][x] == 'PG':
-
-                # Chance of a block spawning
-                block_chance = 10
-                tree_chance = 5
-                air_chance = 50
-                spawn_chance_list = ['air'] * air_chance + ['T'] * tree_chance + [main_block] * block_chance
-                cliff = [main_block] * 9 + ['air']
-                
-                # Spawns a block if there is one above it
-                if map_list[y - 1][x] == main_block or map_list[y - 1][x] == 'T':
-                    map_list[y][x] = main_block
-                
-                # Spawns a block right or left of the block that is spawned by the last function
-                elif (x > 0 and map_list[y - 1][x - 1] == main_block) or (x < width - 1 and map_list[y - 1][x + 1] == main_block):
-                    map_list[y][x] = random.choice(cliff)
-
-                # If the block is should be spawned normally this gives it a chance of spawning
-                else:
-                    block_chance = 7 + (3 * y)
-                    air_chance = 49 - (3 * y) 
-                
-                    # Choosing what block(air, tree, main block) should spawn
-                    spawn_choice = random.choice(spawn_chance_list)
-
-                    # Spawns trees by chance, biom, position. If the choice is not a tree it continiues as normal
-                    if spawn_choice == 'T':
-                        if biom_choice[3] == True:
-                            if map_list[y - 1][x] != 'air':
-                                map_list[y][x] = main_block
-                            else:
-                                map_list[y][x] = 'T'
-                        else:
-                            map_list[y][x] = 'air'
-                    else:
-                        map_list[y][x] = spawn_choice
-
-
             # Trees spawning and its properties
-            if map_list[y][x] == 'T':
+            if simple_list[y][x] == 'T':
                 tree(leaf=biom_choice[0], leaf_color=biom_choice[1], trunk_color=biom_choice[2], xpos=xcor, ypos=ycor, leaf_preset=biom_choice[5])
 
             # Append the collider(position) to normal blocks    
-            elif map_list[y][x] != 'air':
-                block_color = map_list[y][x]
-                block_list.append(map_list[y][x])
+            elif simple_list[y][x] != 'air':
+                block_color = simple_list[y][x]
+                block_list.append(simple_list[y][x])
                 block_draw(xcor, ycor, block_color)
                 #pos_list.append(block_pos)
             xcor += block_size

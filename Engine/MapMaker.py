@@ -1,50 +1,6 @@
 import random
 import pygame
 
-# Function that draws the blocks on the canvas
-def block_draw(xPos, yPos, draw_color):
-    global block_dic
-    rect = pygame.Rect(0, 0, block_size, block_size)
-    rect.center = (xPos, yPos)
-    pygame.draw.rect(window, block_dic[draw_color], rect)
-    
-
-# Tree spawning function
-def tree(leaf, trunk_color, leaf_color, xpos, ypos, leaf_preset):
-    trunk_size = random.randint(1, 4)
-    ypos -= ((trunk_size - 1) * block_size)
-    
-    # Makes the leaves of the tree
-    if leaf:
-        ypos -= len(leaf_preset) * block_size
-        #block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-        xpos -= block_size * ((len(leaf_preset[0]) - 1) / 2)
-        for row in leaf_preset:
-            for leafs in row:
-                if leafs == 'X':
-                    #block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-                    block_list.append(leaf_color)
-                    #pos_list.append(block_pos)
-                    block_draw(xpos, ypos, leaf_color)
-                xpos += block_size
-            xpos -= block_size * len(row)
-            ypos += block_size
-
-        xpos += block_size * ((len(leaf_preset[-1]) - 1) / 2)
-
-
-    # Makes the truk of the tree
-    #block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-    block_list.append(trunk_color)
-    #pos_list.append(block_pos)
-    for trunk in range(trunk_size):
-        block_draw(xpos, ypos, trunk_color)
-        block_list.append(trunk_color)
-        ypos += block_size
-        #block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-
-        #pos_list.append(block_pos)
-
 
 # Makes the bioms and chooses the properties for them
 # Options: leaf spawning, leaf color, trunk color, tree spawning, main block, 
@@ -66,7 +22,7 @@ biom_list = [[True, 'spring leaf', 'bark', True, 'grass', [[' ', 'X', ' '],
 
 biom_choice = random.choice(biom_list)
 main_block = biom_choice[4]
-block_size = 10
+block_size = 20
 
 block_dic = {'air' : '#3776AB',
              'diorite' : 'gray80',
@@ -88,12 +44,51 @@ pos_list = []
 simple_list = []
 xcor = 0
 ycor = 0
-width = 192
-height = 96
+width = 96
+height = 48
 grass_layer = 2
 
-# Random Blocks in Stone Layers and normal layers
-RL = ['air']  + ['diorite'] * 5 + ['sand'] * 5 + ['dirt'] * 10 * 5 + [main_block] * 25 * 5 + ['stone'] * 25 * 5
+
+def position_map(x=xcor, y=ycor, xOffset=0, yOffset=0):
+    if (int(x + xOffset), int(y + yOffset)) not in pos_list:
+        pos_list.append((int(x + xOffset), int(y + yOffset)))
+
+# Function that draws the blocks on the canvas
+def block_draw(xPos, yPos, draw_color):
+    global block_dic
+    rect = pygame.Rect(0, 0, block_size, block_size)
+    rect.center = (xPos, yPos)
+    pygame.draw.rect(window, block_dic[draw_color], rect)
+    
+
+# Tree spawning function
+def tree(leaf, trunk_color, leaf_color, xpos, ypos, leaf_preset):
+    trunk_size = random.randint(1, 4)
+    ypos -= ((trunk_size - 1) * block_size)
+    
+    # Makes the leaves of the tree
+    if leaf:
+        ypos -= len(leaf_preset) * block_size
+        xpos -= block_size * ((len(leaf_preset[0]) - 1) / 2)
+        for row in leaf_preset:
+            for leafs in row:
+                if leafs == 'X':
+                    block_list.append(leaf_color)
+                    block_draw(xpos, ypos, leaf_color)
+                    position_map(x=xpos, y=ypos)
+                xpos += block_size
+            xpos -= block_size * len(row)
+            ypos += block_size
+
+        xpos += block_size * ((len(leaf_preset[-1]) - 1) / 2)
+
+    # Makes the truk of the tree
+    block_list.append(trunk_color)
+    for trunk in range(trunk_size):
+        block_draw(xpos, ypos, trunk_color)
+        position_map(x=xpos, y=ypos)
+        block_list.append(trunk_color)
+        ypos += block_size
 
 
 # Sets up the scene                    
@@ -102,6 +97,7 @@ def sceneMaker():
     global window
     window = pygame.display.set_mode((1920, 1080))
     window.fill('#3776AB')
+    pygame.display.set_caption("Pycraft")
     
 
 def simpleMaker():
@@ -140,13 +136,10 @@ def maker():
     # Draws the block
     # Column
     for y in range(height):
-        xcor = block_size / 2
+        xcor = 0
         ycor = 8 * block_size + (y * block_size)
         # Row
         for x in range(width):
-            # Block coordinates
-            #block_pos = f'({float(round((xcor() + 10), 0))}0,{float(round((ycor() - 10), 0))}0)'
-            # Check if the block is from SLR(Stone Layer Random) list and if it is asign the correct block to it
 
             # Procedural generation blocks
             if y < 6 and (y - 2 < 0 or simple_list[y - 2][x] == 'air'):
@@ -155,12 +148,23 @@ def maker():
                     if random.choice(spawn_chance_list) == 'T' and (y == 0 or simple_list[y - 1][x] == 'air'):
                         simple_list[y][x] = 'T'
                     else:
+                        try:
+                            if simple_list[y - 1][x] == 'air':
+                                position_map(x=xcor, y=ycor)
+                            elif simple_list[y][x - 1] == 'air':
+                                position_map(x=xcor, y=ycor)
+                            elif simple_list[y][x + 1] == 'air':
+                                position_map(x=xcor, y=ycor)
+                        except:
+                            position_map(x=xcor, y=ycor)
+
                         simple_list[y][x] = main_block
+                        
 
             else:
                 air_amount = 2
                 material_amount = 5
-                if y < height - 1 and x < width - 1:
+                if y < height - 1 and 0 < x < width - 1:
                     # Procedural generation for caves
                     # Make chance of air spawning big if it is touching another block and lower the block chances
                     if simple_list[y][x - 1] == 'air' or simple_list[y - 1][x] == 'air' or simple_list[y][x + 1] == 'air' or simple_list[y + 1][x] == 'air':
@@ -173,12 +177,26 @@ def maker():
                     
                     if simple_list[y - 2][x] == 'air' and simple_list[y - 2][x - 1] != 'air' and simple_list[y - 2][x + 1] != 'air':
                         air_amount = 10
+                else:
+                    position_map(x=xcor, y=ycor)
 
                 if simple_list[y][x] == 'block':
                     SLR = ['air'] * air_amount  + ['diorite'] * material_amount + ['sand'] * material_amount + ['dirt'] * material_amount + ['stone'] * (material_amount * 90)
                     simple_list[y][x] = random.choice(SLR)
                 
-                      
+                if (y < height - 1 and 0 < x < width - 1):
+                    if simple_list[y][x] == 'air':
+                        if simple_list[y - 1][x] != 'air':
+                            position_map(yOffset=-block_size, x=xcor, y=ycor)
+                        elif simple_list[y][x - 1] != 'air':
+                            position_map(xOffset=-block_size, x=xcor, y=ycor)
+                    else:
+                        if simple_list[y - 1][x] == 'air':
+                            position_map( x=xcor, y=ycor)
+                        elif simple_list[y][x - 1] == 'air':
+                            position_map(x=xcor, y=ycor)
+                        elif simple_list[y][x + 1] == 'air':
+                            position_map(x=xcor, y=ycor)
 
             # Trees spawning and its properties
             if simple_list[y][x] == 'T':
@@ -193,4 +211,9 @@ def maker():
             xcor += block_size
 
     pygame.display.update()
+    '''
+    pygame.time.delay(5000)
+    for pos in pos_list:
+        block_draw(pos[0], pos[1], 'grass')
+    '''
 

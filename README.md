@@ -1,2 +1,0 @@
-# Pycraft
-A game similar to terraria, it has procedural generation using nothing but code made using the random module that comes with python. Previous versions are made with python turtle (that includes simple world generation and a player), but for the sake of speed I switched to the pygame module (translation still in progress as of 7.28.2024). All of the code is made using python and it is less than 100 KB (not including venv and git files). I hope to achive a highly complex game like Dwarf Fortres with minimal graphics.
